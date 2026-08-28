@@ -1,45 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Contato() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [assunto, setAssunto] = useState("");
   const [mensagem, setMensagem] = useState("");
-  const [protocolo, setProtocolo] = useState(null);
+  const [protocolo, setProtocolo] = useState<number | null>(null);
 
   function gerarProtocolo() {
     // Operação com Math: randomização e arredondamento
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const protocoloGerado = gerarProtocolo();
-    setProtocolo(protocoloGerado);
+      const protocoloGerado = gerarProtocolo();
+      setProtocolo(protocoloGerado);
 
-    // Salvar no localStorage (armazenamento de dados)
-    const novoContato = {
-      nome,
-      email,
-      assunto,
-      mensagem,
-      protocolo: protocoloGerado,
-      data: new Date().toLocaleString("pt-BR"),
-    };
+      // Salvar no localStorage (armazenamento de dados)
+      const novoContato = {
+        nome,
+        email,
+        assunto,
+        mensagem,
+        protocolo: protocoloGerado,
+        data: new Date().toLocaleString("pt-BR"),
+      };
 
-    const contatosSalvos = JSON.parse(localStorage.getItem("jovi_contatos")) || [];
-    contatosSalvos.push(novoContato);
-    localStorage.setItem("jovi_contatos", JSON.stringify(contatosSalvos));
+    const dadosSalvos = localStorage.getItem("jovi_contatos");
+    const contatosSalvos = dadosSalvos ? JSON.parse(dadosSalvos) : [];
+      contatosSalvos.push(novoContato);
+      localStorage.setItem("jovi_contatos", JSON.stringify(contatosSalvos));
 
-    // Limpar formulário
-    setNome("");
-    setEmail("");
-    setAssunto("");
-    setMensagem("");
-  }
+      // Limpar formulário
+      setNome("");
+      setEmail("");
+      setAssunto("");
+      setMensagem("");
+    }
 
   return (
     <section className="section contact" id="contato">
